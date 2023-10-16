@@ -69,7 +69,6 @@ ifdef T_A
 PKG_ARCH=$(T_A)
 endif
 
-
 # CPSW
 CPSW_FRAMEWORK_PACKAGE_NAME=cpsw/framework
 CPSW_FRAMEWORK_VERSION=R4.4.1
