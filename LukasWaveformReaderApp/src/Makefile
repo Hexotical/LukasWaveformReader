@@ -10,29 +10,36 @@ include $(TOP)/configure/CONFIG
 # =====================================================
 # Path to "NON EPICS" External PACKAGES: USER INCLUDES
 # =====================================================
-USR_INCLUDES = $(addprefix -I,$(BOOST_INCLUDE) $(CPSW_FRAMEWORK_INCLUDE) $(YAML_INCLUDE) $(YAMLREADER_INCLUDE) $(DEVICELIB_INCLUDE))
 USR_CXXFLAGS += -DHAVE_YAML -std=c++0x
+
+USR_INCLUDES += -I$(BOOST_INCLUDE)
+USR_INCLUDES += -I$(CPSW_FRAMEWORK_INCLUDE)
+USR_INCLUDES += -I$(YAML_INCLUDE)
+USR_INCLUDES += -I$(YAMLREADER_INCLUDE)
+USR_INCLUDES += -I$(DEVICELIB_INCLUDE)
+
 # =====================================================
 
 # ======================================================
 #PATH TO "NON EPICS" EXTERNAL PACKAGES: USER LIBRARIES
 # ======================================================
-cpsw_DIR = $(CPSW_FRAMEWORK_LIB)
-yaml-cpp_DIR = $(YAML_LIB)
-yamlReader_DIR = $(YAMLREADER_LIB)
-deviceLib_DIR = $(DEVICELIB_LIB)
-boost_DIR = $(BOOST_LIB)
+cpsw_DIR          = $(CPSW_FRAMEWORK_LIB)
+yaml-cpp_DIR      = $(YAML_LIB)
+deviceLib_DIR     = $(DEVICELIB_LIB)
+yamlReader_DIR    = $(YAMLREADER_LIB)
+boost_system_DIR  = $(BOOST_LIB)
+
 # ======================================================
 
 # ======================================================
 # LINK "NON EPICS" EXTERNAL PACKAGE LIBRARIES STATICALLY
 # ======================================================
 
-
-
-USR_LIBS_Linux += deviceLib cpsw yaml-cpp
+USR_LIBS_Linux += cpsw 
+USR_LIBS_Linux += boost_system 
+USR_LIBS_Linux += yaml-cpp 
 USR_LIBS_Linux += yamlReader 
-
+USR_LIBS_Linux += deviceLib
 
 # ======================================================
 PROD_IOC = LukasWaveformReader
