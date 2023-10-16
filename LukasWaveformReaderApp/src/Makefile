@@ -1,0 +1,75 @@
+TOP=../..
+
+include $(TOP)/configure/CONFIG
+#----------------------------------------
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
+#=============================
+
+#=============================
+# Build the IOC application
+# =====================================================
+# Path to "NON EPICS" External PACKAGES: USER INCLUDES
+# =====================================================
+USR_INCLUDES = $(addprefix -I,$(BOOST_INCLUDE) $(CPSW_FRAMEWORK_INCLUDE) $(YAML_INCLUDE) $(YAMLREADER_INCLUDE) $(DEVICELIB_INCLUDE))
+USR_CXXFLAGS += -DHAVE_YAML -std=c++0x
+# =====================================================
+
+# ======================================================
+#PATH TO "NON EPICS" EXTERNAL PACKAGES: USER LIBRARIES
+# ======================================================
+cpsw_DIR = $(CPSW_FRAMEWORK_LIB)
+yaml-cpp_DIR = $(YAML_LIB)
+yamlReader_DIR = $(YAMLREADER_LIB)
+deviceLib_DIR = $(DEVICELIB_LIB)
+boost_DIR = $(BOOST_LIB)
+# ======================================================
+
+# ======================================================
+# LINK "NON EPICS" EXTERNAL PACKAGE LIBRARIES STATICALLY
+# ======================================================
+
+
+
+USR_LIBS_Linux += deviceLib cpsw yaml-cpp
+USR_LIBS_Linux += yamlReader 
+
+
+# ======================================================
+PROD_IOC = LukasWaveformReader
+# LukasWaveformReader.dbd will be created and installed
+DBD += LukasWaveformReader.dbd
+
+# LukasWaveformReader.dbd will be made up from these files:
+LukasWaveformReader_DBD += base.dbd
+LukasWaveformReader_DBD += asyn.dbd
+LukasWaveformReader_DBD += yamlLoader.dbd
+LukasWaveformReader_DBD += yamlDownloader.dbd #TODO Problem line that's breaking my life
+# Include dbd files from all support applications:
+#LukasWaveformReader_DBD += xxx.dbd
+
+# Add all the support libraries needed by this IOC
+#LukasWaveformReader_LIBS += xxx
+
+# LukasWaveformReader_registerRecordDeviceDriver.cpp derives from LukasWaveformReader.dbd
+LukasWaveformReader_SRCS += LukasWaveformReader_registerRecordDeviceDriver.cpp
+
+# Build the main IOC entry point on workstation OSs.
+LukasWaveformReader_SRCS_DEFAULT += LukasWaveformReaderMain.cpp
+LukasWaveformReader_SRCS_vxWorks += -nil-
+
+# Add support from base/src/vxWorks if needed
+#LukasWaveformReader_OBJS_vxWorks += $(EPICS_BASE_BIN)/vxComLibrary
+
+# Finally link to the EPICS Base libraries
+LukasWaveformReader_LIBS += $(EPICS_BASE_IOC_LIBS)
+LukasWaveformReader_LIBS += cpsw
+LukasWaveformReader_LIBS += asyn
+LukasWaveformReader_LIBS += yamlLoader
+LukasWaveformReader_LIBS += yamlDownloader
+
+#===========================
+
+include $(TOP)/configure/RULES
+#----------------------------------------
+#  ADD RULES AFTER THIS LINE
+
